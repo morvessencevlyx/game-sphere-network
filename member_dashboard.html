@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Dashboard - Game Sphere Network</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <div class="nav-brand">🌠 GSN</div>
+        <div class="nav-user">
+            <span id="usernameDisplay">User</span>
+            <button onclick="logout()" class="btn-logout">Logout</button>
+        </div>
+    </nav>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div class="dashboard-container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <ul>
+                <li><a href="#" class="active" onclick="showSection('overview')">📊 Overview</a></li>
+                <li><a href="#" onclick="showSection('clicking')">🖱️ Clicking</a></li>
+                <li><a href="#" onclick="showSection('referral')">👥 Referral</a></li>
+                <li><a href="#" onclick="showSection('withdrawal')">💵 Withdrawal</a></li>
+                <li><a href="#" onclick="showSection('membership')">💰 Membership</a></li>
+                <li><a href="#" onclick="showSection('announcements')">📢 Announcements</a></li>
+            </ul>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- ========================== -->
+            <!-- SECTION: OVERVIEW          -->
+            <!-- ========================== -->
+            <div id="overview" class="section active">
+                <h2>Welcome, <span id="welcomeName">Member</span>! 👋</h2>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>💰 Balance</h3>
+                        <p id="balanceDisplay">₱0.00</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>⭐ Points</h3>
+                        <p id="pointsDisplay">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>🎫 Membership</h3>
+                        <p id="membershipDisplay">❌ Not Paid</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>👥 Referrals</h3>
+                        <p id="referralsDisplay">0</p>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h4>📋 Your Referral Code</h4>
+                    <p id="referralCodeDisplay" class="code"></p>
+                    <button onclick="copyReferralCode()" class="btn-secondary" style="width:auto; padding:8px 20px;">📋 Copy Code</button>
+                </div>
+
+                <div class="quick-actions" style="margin-top:20px;">
+                    <h4>⚡ Quick Actions</h4>
+                    <div class="action-buttons">
+                        <button onclick="showSection('clicking')" class="btn-secondary">🖱️ Start Clicking</button>
+                        <button onclick="showSection('withdrawal')" class="btn-secondary">💵 Withdraw</button>
+                        <button onclick="showSection('membership')" class="btn-secondary">💰 Pay Membership</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================== -->
+            <!-- SECTION: CLICKING          -->
+            <!-- ========================== -->
+            <div id="clicking" class="section">
+                <h2>🖱️ Click to Earn</h2>
+                <div class="clicking-area" style="text-align:center; padding:20px;">
+                    <div class="stats-grid" style="max-width:400px; margin:0 auto;">
+                        <div class="stat-card">
+                            <h3>Your Points</h3>
+                            <p id="clickPoints">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Rate</h3>
+                            <p style="font-size:20px;">₱1 / click</p>
+                        </div>
+                    </div>
+
+                    <button id="clickButton" onclick="handleClick()" class="btn-click">
+                        🖱️ CLICK ME!
+                    </button>
+
+                    <div class="click-rules" style="margin-top:20px; text-align:left; background:white; padding:15px; border-radius:10px;">
+                        <p><strong>📌 Clicking Rules:</strong></p>
+                        <p>✅ ₱1 per click</p>
+                        <p>✅ Min: 500 pts = ₱200 received</p>
+                        <p>✅ Max: 1K pts + 1 invite = ₱500 received</p>
+                        <p id="clickStatus" class="status-text" style="margin-top:10px; font-weight:bold; color:#4CAF50;">✅ Clicking Active</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================== -->
+            <!-- SECTION: REFERRAL          -->
+            <!-- ========================== -->
+            <div id="referral" class="section">
+                <h2>👥 Referral System</h2>
+                <div class="referral-info" style="background:white; padding:20px; border-radius:12px;">
+                    <div style="text-align:center; padding:10px;">
+                        <p style="font-size:16px;">Your Referral Code:</p>
+                        <p id="refCode" class="code" style="font-size:24px; padding:10px 30px;"></p>
+                        <button onclick="copyReferralCode()" class="btn-secondary" style="width:auto; padding:8px 20px;">📋 Copy</button>
+                    </div>
+                    
+                    <div class="stats-grid" style="margin-top:20px;">
+                        <div class="stat-card">
+                            <h3>Total Referrals</h3>
+                            <p id="totalRefs">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Referral Rewards</h3>
+                            <p style="font-size:16px;">Min: 500 = 5 invites</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:15px; padding:15px; background:#f8f9fa; border-radius:8px;">
+                        <p><strong>🎁 Referral Rewards:</strong></p>
+                        <p>📌 Min: 500 points = 5 invites</p>
+                        <p>📌 Max: 1K points = 10 invites</p>
+                        <p style="color:#7f8c8d; font-size:13px; margin-top:5px;">Share your referral code to earn rewards!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================== -->
+            <!-- SECTION: WITHDRAWAL        -->
+            <!-- ========================== -->
+            <div id="withdrawal" class="section">
+                <h2>💵 Withdrawal</h2>
+                <div class="withdrawal-info" style="background:white; padding:20px; border-radius:12px;">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Available Balance</h3>
+                            <p id="wdBalance">₱0.00</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Points</h3>
+                            <p id="wdPoints">0</p>
+                        </div>
+                    </div>
+
+                    <button onclick="requestWithdrawal()" id="withdrawBtn" class="btn-primary" style="margin-top:10px;">
+                        Request Withdrawal
+                    </button>
+
+                    <div class="schedule" style="margin-top:20px; padding:15px; background:#f0f2f5; border-radius:8px;">
+                        <h4>📅 Withdrawal Schedule</h4>
+                        <p>📌 <strong>Wed - Fri:</strong> Google Form &amp; Checking</p>
+                        <p>📌 <strong>Saturday:</strong> Drop approved list</p>
+                        <p>📌 <strong>Sunday:</strong> Release (5PM - 8PM)</p>
+                        <p style="color:#e74c3c; font-size:13px; margin-top:5px;">⚠️ Early withdrawal = ₱100 penalty</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================== -->
+            <!-- SECTION: MEMBERSHIP        -->
+            <!-- ========================== -->
+            <div id="membership" class="section">
+                <h2>💰 Membership</h2>
+                <div class="membership-info" style="background:white; padding:20px; border-radius:12px;">
+                    <div style="text-align:center; padding:10px;">
+                        <h3 id="membershipStatus" style="color:#e74c3c;">❌ Not Paid</h3>
+                        <p style="color:#7f8c8d; font-size:14px;">Pay your membership fee to start earning!</p>
+                    </div>
+
+                    <div class="stats-grid" style="margin-top:15px;">
+                        <div class="stat-card">
+                            <h3>Full Payment</h3>
+                            <p style="font-size:20px;">₱200</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Downpayment</h3>
+                            <p style="font-size:20px;">₱100</p>
+                        </div>
+                    </div>
+
+                    <button onclick="payMembership()" class="btn-primary" style="margin-top:10px;">
+                        💳 Pay Membership
+                    </button>
+
+                    <div class="promo" style="margin-top:20px; padding:15px; background:#fff3cd; border-radius:8px; border-left:4px solid #f39c12;">
+                        <h4 style="color:#856404;">🎉 Birthday Promo!</h4>
+                        <p style="color:#856404;">Membership Fee: <strong>₱150</strong> only!</p>
+                        <p style="color:#856404; font-size:13px;">📅 July 11 - August 20, 2026</p>
+                    </div>
+
+                    <div style="margin-top:15px; padding:15px; background:#f8f9fa; border-radius:8px;">
+                        <p style="font-size:13px; color:#7f8c8d;">
+                            <strong>Note:</strong> Settle your remaining balance before your first withdrawal.
+                            Renewal is automatically deducted every 2nd, 4th, 6th, and so on.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================== -->
+            <!-- SECTION: ANNOUNCEMENTS     -->
+            <!-- ========================== -->
+            <div id="announcements" class="section">
+                <h2>📢 Announcements</h2>
+                <div id="announcementList" class="announcement-list"></div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="js/database.js"></script>
+    <script>
+        // ============================================
+        // GAME SPHERE NETWORK - MEMBER DASHBOARD JS
+        // ============================================
+
+        let currentUser = null;
+
+        // ============================================
+        // ON PAGE LOAD
+        // ============================================
+        window.onload = function() {
+            const userData = localStorage.getItem('currentUser');
+            if (!userData) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            currentUser = JSON.parse(userData);
+
+            if (currentUser.role === 'admin') {
+                window.location.href = 'admin-dashboard.html';
+                return;
+            }
+
+            updateDashboard();
+            loadAnnouncements();
+        };
+
+        // ============================================
+        // UPDATE DASHBOARD
+        // ============================================
+        function updateDashboard() {
+            const user = DB.findById('users', currentUser.id);
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+            }
+
+            // Update UI elements
+            document.getElementById('usernameDisplay').textContent = user.username;
+            document.getElementById('welcomeName').textContent = user.fullName || user.username;
+            document.getElementById('balanceDisplay').textContent = '₱' + user.balance.toFixed(2);
+            document.getElementById('pointsDisplay').textContent = user.points;
+            document.getElementById('referralsDisplay').textContent = user.totalReferrals || 0;
+            document.getElementById('referralCodeDisplay').textContent = user.referralCode;
+            document.getElementById('refCode').textContent = user.referralCode;
+            document.getElementById('totalRefs').textContent = user.totalReferrals || 0;
+            document.getElementById('clickPoints').textContent = user.points;
+            document.getElementById('wdBalance').textContent = '₱' + user.balance.toFixed(2);
+            document.getElementById('wdPoints').textContent = user.points;
+
+            // MEMBERSHIP STATUS
+            const membershipStatus = document.getElementById('membershipStatus');
+            const membershipDisplay = document.getElementById('membershipDisplay');
+            if (user.membershipPaid === 'yes') {
+                membershipStatus.textContent = '✅ ' + user.membershipType.toUpperCase() + ' - Active';
+                membershipStatus.style.color = '#2ecc71';
+                membershipDisplay.textContent = '✅ ' + user.membershipType.toUpperCase();
+                membershipDisplay.style.color = '#2ecc71';
+            } else {
+                membershipStatus.textContent = '❌ Not Paid';
+                membershipStatus.style.color = '#e74c3c';
+                membershipDisplay.textContent = '❌ Not Paid';
+                membershipDisplay.style.color = '#e74c3c';
+            }
+
+            // CHECK CLICKING STATUS
+            const clickBtn = document.getElementById('clickButton');
+            const clickStatus = document.getElementById('clickStatus');
+            
+            if (user.isBanned === 'yes') {
+                clickBtn.disabled = true;
+                clickBtn.style.opacity = '0.5';
+                clickStatus.textContent = '⛔ Account Banned!';
+                clickStatus.style.color = '#e74c3c';
+            } else if (user.membershipPaid === 'no') {
+                clickBtn.disabled = true;
+                clickBtn.style.opacity = '0.5';
+                clickStatus.textContent = '⛔ Pay membership fee first!';
+                clickStatus.style.color = '#e74c3c';
+            } else if (user.withdrawalCount > 0) {
+                clickBtn.disabled = true;
+                clickBtn.style.opacity = '0.5';
+                clickStatus.textContent = '⛔ Clicking disabled (Withdrawal pending)';
+                clickStatus.style.color = '#e74c3c';
+            } else {
+                clickBtn.disabled = false;
+                clickBtn.style.opacity = '1';
+                clickStatus.textContent = '✅ Clicking Active';
+                clickStatus.style.color = '#2ecc71';
+            }
+
+            // CHECK WITHDRAWAL BUTTON
+            const wdBtn = document.getElementById('withdrawBtn');
+            if (user.points < 500) {
+                wdBtn.disabled = true;
+                wdBtn.textContent = 'Need 500 points to withdraw';
+            } else if (user.withdrawalCount > 0) {
+                wdBtn.disabled = true;
+                wdBtn.textContent = 'Withdrawal pending';
+            } else if (user.membershipPaid === 'no') {
+                wdBtn.disabled = true;
+                wdBtn.textContent = 'Pay membership first';
+            } else {
+                wdBtn.disabled = false;
+                wdBtn.textContent = '💰 Request Withdrawal';
+            }
+        }
+
+        // ============================================
+        // HANDLE CLICK
+        // ============================================
+        function handleClick() {
+            const user = DB.findById('users', currentUser.id);
+            if (!user) return;
+
+            // CHECK IF ALLOWED
+            if (user.isBanned === 'yes') {
+                alert('⛔ Your account is banned!');
+                return;
+            }
+            if (user.membershipPaid === 'no') {
+                alert('❌ Please pay your membership fee first!');
+                return;
+            }
+            if (user.withdrawalCount > 0) {
+                alert('⛔ Clicking disabled due to pending withdrawal');
+                return;
+            }
+
+            // INCREMENT POINTS AND BALANCE
+            const newPoints = user.points + 1;
+            const newBalance = user.balance + 1;
+
+            // UPDATE DATABASE
+            DB.update('users', user.id, {
+                points: newPoints,
+                balance: newBalance
+            });
+
+            // UPDATE CURRENT USER
+            currentUser = DB.findById('users', user.id);
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            // UPDATE DISPLAY
+            document.getElementById('pointsDisplay').textContent = newPoints;
+            document.getElementById('balanceDisplay').textContent = '₱' + newBalance.toFixed(2);
+            document.getElementById('clickPoints').textContent = newPoints;
+            document.getElementById('wdPoints').textContent = newPoints;
+            document.getElementById('wdBalance').textContent = '₱' + newBalance.toFixed(2);
+
+            // CHECK WITHDRAWAL ELIGIBILITY
+            if (newPoints >= 500) {
+                const wdBtn = document.getElementById('withdrawBtn');
+                if (user.withdrawalCount === 0) {
+                    wdBtn.disabled = false;
+                    wdBtn.textContent = '💰 Request Withdrawal';
+                }
+            }
+
+            // SHOW FEEDBACK
+            const clickBtn = document.getElementById('clickButton');
+            clickBtn.textContent = '✅ +1 Point!';
+            setTimeout(() => {
+                clickBtn.textContent = '🖱️ CLICK ME!';
+            }, 500);
+        }
+
+        // ============================================
+        // REQUEST WITHDRAWAL
+        // ============================================
+        function requestWithdrawal() {
+            const user = DB.findById('users', currentUser.id);
+            if (!user) return;
+
+            // VALIDATIONS
+            if (user.membershipPaid === 'no') {
+                alert('❌ Please pay your membership fee first!');
+                return;
+            }
+
+            if (user.points < 500) {
+                alert('❌ You need at least 500 points to withdraw!');
+                return;
+            }
+
+            if (user.withdrawalCount > 0) {
+                alert('❌ You already have a pending withdrawal!');
+                return;
+            }
+
+            // CHECK SCHEDULE (Wed-Fri only)
+            const day = new Date().getDay(); // 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
+            if (day < 3 || day > 5) {
+                alert('📅 Withdrawal requests are only accepted Wednesday to Friday!');
+                return;
+            }
+
+            // COMPUTE AMOUNT
+            let amount = 200; // Base for 500 points
+            if (user.points >= 1000 && user.totalReferrals >= 1) {
+                amount = 500;
+            }
+
+            // CREATE WITHDRAWAL REQUEST
+            const withdrawal = {
+                idUser: user.id,
+                username: user.username,
+                amount: amount,
+                pointsUsed: user.points,
+                status: 'pending',
+                requestDate: new Date().toISOString(),
+                releaseDate: '',
+                weekNumber: getWeekNumber(),
+                formSubmitted: 'no'
+            };
+
+            DB.insert('withdrawals', withdrawal);
+
+            // UPDATE USER
+            DB.update('users', user.id, {
+                points: 0,
+                withdrawalCount: user.withdrawalCount + 1
+            });
+
+            // UPDATE CURRENT USER
+            currentUser = DB.findById('users', user.id);
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            alert('✅ Withdrawal request submitted! Amount: ₱' + amount + 
+                  '\n\n📋 Please fill out the Google Form.\n' +
+                  '📅 Release: Sunday 5PM-8PM');
+
+            updateDashboard();
+        }
+
+        // ============================================
+        // PAY MEMBERSHIP
+        // ============================================
+        function payMembership() {
+            const user = DB.findById('users', currentUser.id);
+            if (!user) return;
+
+            if (user.membershipPaid === 'yes') {
+                alert('✅ You already have an active membership!');
+                return;
+            }
+
+            // CHECK IF BIRTHDAY PROMO IS ACTIVE
+            const today = new Date();
+            const promoStart = new Date('2026-07-11');
+            const promoEnd = new Date('2026-08-20');
+            const isPromo = (today >= promoStart && today <= promoEnd);
+
+            let message = 'Choose payment option:\n\n';
+            message += isPromo ? '🎉 Birthday Promo: ₱150\n' : '';
+            message += '1️⃣ Full Payment: ₱200\n';
+            message += '2️⃣ Downpayment: ₱100';
+
+            const choice = prompt(message);
+
+            if (choice === null) return;
+
+            let amount, type;
+            if (choice === '1' || choice.toLowerCase() === 'full' || choice === '200') {
+                amount = isPromo ? 150 : 200;
+                type = 'full';
+            } else if (choice === '2' || choice.toLowerCase() === 'down' || choice === '100') {
+                amount = 100;
+                type = 'downpayment';
+            } else {
+                alert('Invalid choice!');
+                return;
+            }
+
+            if (user.balance < amount) {
+                alert('❌ Insufficient balance! Need ₱' + amount + 
+                      '\nYour balance: ₱' + user.balance);
+                return;
+            }
+
+            // DEDUCT BALANCE
+            const newBalance = user.balance - amount;
+
+            // UPDATE USER
+            DB.update('users', user.id, {
+                balance: newBalance,
+                membershipPaid: 'yes',
+                membershipType: type
+            });
+
+            // UPDATE CURRENT USER
+            currentUser = DB.findById('users', user.id);
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            alert('✅ Membership ' + type.toUpperCase() + ' payment successful!\n' +
+                  'Remaining balance: ₱' + newBalance);
+
+            updateDashboard();
+        }
+
+        // ============================================
+        // LOAD ANNOUNCEMENTS
+        // ============================================
+        function loadAnnouncements() {
+            const announcements = DB.getAll('announcements');
+            const list = document.getElementById('announcementList');
+
+            if (announcements.length === 0) {
+                list.innerHTML = '<div class="announcement-item"><p>No announcements yet.</p></div>';
+                return;
+            }
+
+            // Sort by date (newest first) and priority
+            announcements.sort((a, b) => {
+                if (a.priority !== b.priority) return a.priority - b.priority;
+                return new Date(b.dateCreated) - new Date(a.dateCreated);
+            });
+
+            list.innerHTML = announcements.map(ann => `
+                <div class="announcement-item priority-${ann.priority}">
+                    <h4>${ann.title}</h4>
+                    <p>${ann.content}</p>
+                    <small>📅 ${new Date(ann.dateCreated).toLocaleDateString('en-PH', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    })}</small>
+                </div>
+            `).join('');
+        }
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+
+        // COPY REFERRAL CODE
+        function copyReferralCode() {
+            const code = document.getElementById('referralCodeDisplay').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('✅ Referral code copied: ' + code);
+            }).catch(() => {
+                // FALLBACK: Select and copy
+                const codeEl = document.getElementById('referralCodeDisplay');
+                const range = document.createRange();
+                range.selectNode(codeEl);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                document.execCommand('copy');
+                alert('✅ Referral code copied: ' + code);
+            });
+        }
+
+        // GET WEEK NUMBER
+        function getWeekNumber() {
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 0, 1);
+            const diff = (now - start) / 86400000;
+            return Math.ceil((diff + start.getDay() + 1) / 7);
+        }
+
+        // SHOW SECTION
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+
+            document.querySelectorAll('.sidebar a').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // Refresh data when switching sections
+            switch(sectionId) {
+                case 'overview':
+                case 'clicking':
+                case 'withdrawal':
+                case 'membership':
+                    updateDashboard();
+                    break;
+                case 'announcements':
+                    loadAnnouncements();
+                    break;
+            }
+        }
+
+        // LOGOUT
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // ============================================
+        // AUTO-REFRESH EVERY 30 SECONDS
+        // ============================================
+        setInterval(function() {
+            if (document.querySelector('.section.active')) {
+                const activeSection = document.querySelector('.section.active');
+                if (activeSection.id !== 'announcements') {
+                    updateDashboard();
+                }
+            }
+        }, 30000);
+    </script>
+</body>
+</html>
