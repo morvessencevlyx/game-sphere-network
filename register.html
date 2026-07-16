@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Game Sphere Network</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-card">
+            <div class="logo">
+                <h1>🌠 Game Sphere Network</h1>
+                <p>Create Your Account</p>
+            </div>
+            
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="username" placeholder="Choose a username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Minimum 6 characters" required minlength="6">
+                </div>
+                
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="agreeTerms" required>
+                        I agree to the Terms & Conditions
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn-primary">Create Account</button>
+                
+                <div class="form-footer">
+                    <p>Already have an account? <a href="login.html">Login here</a></p>
+                </div>
+            </form>
+            
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+    
+    <script src="js/database.js"></script>
+    <script>
+        function handleRegister(e) {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('fullName').value.trim();
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            
+            if (!fullName || !username || !email || !password || !confirmPassword) {
+                showMessage('Please fill in all fields!', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showMessage('Password must be at least 6 characters!', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showMessage('Passwords do not match!', 'error');
+                return;
+            }
+            
+            if (!agreeTerms) {
+                showMessage('Please agree to the Terms & Conditions!', 'error');
+                return;
+            }
+            
+            const existingUser = DB.findByField('users', 'email', email);
+            if (existingUser) {
+                showMessage('Email already registered!', 'error');
+                return;
+            }
+            
+            const existingUsername = DB.findByField('users', 'username', username);
+            if (existingUsername) {
+                showMessage('Username already taken!', 'error');
+                return;
+            }
+            
+            const newUser = {
+                username: username,
+                email: email,
+                password: password,
+                fullName: fullName,
+                role: 'member',
+                balance: 0,
+                membershipPaid: 'no',
+                membershipType: 'none',
+                registrationDate: new Date().toISOString(),
+                isBanned: 'no',
+                violationCount: 0,
+                referralCode: username.substring(0, 3).toUpperCase() + Math.floor(100 + Math.random() * 900),
+                totalReferrals: 0,
+                points: 0,
+                withdrawalCount: 0
+            };
+            
+            const savedUser = DB.insert('users', newUser);
+            
+            localStorage.setItem('currentUser', JSON.stringify(savedUser));
+            
+            showMessage('✅ Account created successfully! Redirecting...', 'success');
+            
+            setTimeout(() => {
+                window.location.href = savedUser.role === 'admin' ? 'admin-dashboard.html' : 'member-dashboard.html';
+            }, 1500);
+        }
+        
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = 'message ' + type;
+        }
+    </script>
+</body>
+</html>
